@@ -2,7 +2,7 @@
 #
 # SublimeBlender.py
 #
-# Version: 1.0
+# Version: 1.10
 # Author: Sven Fraeys
 #
 # Description: 
@@ -42,8 +42,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     self._writeheaders()
       
   def do_GET(self):
+    # add cube to test behaviour
+    # bpy.ops.mesh.primitive_cube_add()
+
     # global running  
-    DEBUG = False
+    DEBUG = True
     SUBLIME_STDOUT = True
 
     originalStdOut = None
@@ -52,11 +55,6 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     import urllib
     from urllib.parse import urlparse
     import sys, io, traceback
-
-    if SUBLIME_STDOUT:
-      originalStdOut = sys.stdout
-      newStdOut = io.StringIO()
-      sys.stdout = newStdOut
 
     parsed_path = urlparse(self.path)
     # print(parsed_path)
@@ -73,6 +71,18 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
     retstr = ""
 
+    if "stdout" in params:
+      if params["stdout"] == "True":
+          SUBLIME_STDOUT = True
+      elif params["stdout"] == "False":
+          SUBLIME_STDOUT = False
+
+
+    if SUBLIME_STDOUT:
+      originalStdOut = sys.stdout
+      newStdOut = io.StringIO()
+      sys.stdout = newStdOut
+
     if "scriptpath" in params:
       scriptpath = params["scriptpath"]
       
@@ -81,7 +91,10 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
       scriptpath = scriptpath.strip()
       if scriptpath != None:
         try:
-          exec(compile(open(scriptpath).read(), scriptpath, 'exec'))
+          pass
+          # launch incoming script
+          exec(compile(open(scriptpath).read(), scriptpath, 'exec'), globals(), locals() )
+          
         except:
           print(str(traceback.format_exc()))
 
@@ -96,6 +109,66 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     if "print" in params:
       print(params["print"])
 
+    if "console_namespace_complete" in params:
+      variableObject = None
+      query = params["console_namespace_complete"]
+      nameOfObjectToDir = (params["namespace"])
+      import importlib
+      if nameOfObjectToDir in globals():
+        variableObject = eval(nameOfObjectToDir)
+      else:
+        variableObject = importlib.import_module(nameOfObjectToDir)
+      if variableObject:
+        import console.complete_namespace
+        completinglist = console.complete_namespace.complete(query, {nameOfObjectToDir : variableObject})
+        if DEBUG: print("nameOfObjectToDir=%s" % nameOfObjectToDir)
+        if DEBUG: print("variableObject=%s" % variableObject)
+        if DEBUG: print(completinglist)
+        listOfAttributes = ""
+        for attr in completinglist:
+          listOfAttributes += attr + ";"
+        retstr=listOfAttributes
+      else:
+        print("could not find namespace : %s" % namespace )
+
+    if "console_import_complete" in params:
+      
+
+      nameOfObjectToDir = (params["console_import_complete"])
+      import console.complete_import
+      completinglist = console.complete_import.complete(nameOfObjectToDir)
+      listOfAttributes = ""
+      for attr in completinglist:
+        listOfAttributes += attr + ";"
+      retstr=listOfAttributes
+
+    if "dir" in params:
+
+      nameOfObjectToDir = (params["dir"])
+      if DEBUG : print("dir=%s" % nameOfObjectToDir)
+      listOfAttributes = ""
+      variableObject = None
+      found = False
+      if nameOfObjectToDir in globals():
+        found = True
+        variableObject = eval(nameOfObjectToDir)
+      else:
+        try:
+          import importlib
+          variableObject = importlib.import_module(nameOfObjectToDir)
+          found = True
+        except:
+          pass
+        
+      if found:
+          # variableObject = eval(nameOfObjectToDir)
+          attrs = dir(variableObject)
+          for attr in attrs:
+            listOfAttributes += attr + ";"
+          retstr=listOfAttributes
+      else:
+        print("not found : %s" % nameOfObjectToDir)
+      
 #     retstr="finished"
 #     retstr = """<HTML>
 # <HEAD><TITLE>Dummy response</TITLE></HEAD>
@@ -151,7 +224,7 @@ bl_info = {
         "category" : "Development",
         "author" : "Sven Fraeys",
         "wiki_url": "https://docs.google.com/document/d/1-hWEdp1Gz4zjyio7Hdc0ZnFXKNB6eusYITnuMI3n65M",
-        "version": (1, 0)
+        "version": (1, 1, 0)
 }
 
 class SublimeBlenderOpenConnection(bpy.types.Operator):
@@ -162,6 +235,8 @@ class SublimeBlenderOpenConnection(bpy.types.Operator):
     def execute(self, context):
         DEBUG = False
         httpd = None
+
+        
 
         try:
           httpd = socketserver.TCPServer((IP_ADDRESS, PORT), RequestHandler)
@@ -189,12 +264,30 @@ def register():
     bpy.utils.register_class(SublimeBlenderOpenConnection)
 
 def unregister():
-    self.http_thread.shutdown()
-    self.http_thread.socket.close()
-    self.control_thread.shutdown()
-    self.control_thread.socket.close()
     bpy.utils.unregister_class(SublimeBlenderOpenConnection)
     
 if __name__ == "__main__":
     register()
 
+
+'''
+WIP
+import xml.etree.cElementTree.
+import xml.etree.cElementTree as ET
+
+root = ET.Element("root")
+
+doc = ET.SubElement(root, "doc")
+
+field1 = ET.SubElement(doc, "field1")
+field1.set("name", "blah")
+field1.text = "some value1"
+
+field2 = ET.SubElement(doc, "field2")
+field2.set("name", "asdfasd")
+field2.text = "some vlaue2"
+
+tree = ET.ElementTree(root)
+xml = ET.tostring(root, encoding='utf8', method='xml')
+print(xml)
+'''
