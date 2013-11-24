@@ -1,5 +1,5 @@
 [
 	{ 
-		"keys": ["ctrl+e"], "command": "sublime_blender" 
+		"keys": ["ctrl+e"], "command": "sublime_blender_execute"
 	}
 ]
