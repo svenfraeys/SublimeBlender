@@ -1,0 +1,38 @@
+[
+    {
+        "caption": "Blender : Execute in Blender",
+        "command": "sublime_blender_execute",
+
+    },
+    {
+        "caption": "Preferences: SublimeBlender Settings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/SublimeBlender/SublimeBlender.sublime-settings"
+        }
+    },
+    {
+        "caption": "Preferences: SublimeBlender Key Bindings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/SublimeBlender/Default (Windows).sublime-keymap",
+            "platform": "Windows"
+        }
+    },
+    {
+        "caption": "Preferences: SublimeBlender Key Bindings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/SublimeBlender/Default (OSX).sublime-keymap",
+            "platform": "OSX"
+        }
+    },
+    {
+        "caption": "Preferences: SublimeBlender Key Bindings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/SublimeBlender/Default (Linux).sublime-keymap",
+            "platform": "Linux"
+        }
+    }
+]

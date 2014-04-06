@@ -1,0 +1,5 @@
+[
+	{ 
+		"keys": ["alt+p"], "command": "sublime_blender_execute"
+	}
+]

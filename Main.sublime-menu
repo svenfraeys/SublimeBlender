@@ -1,0 +1,61 @@
+[
+	{
+		"caption": "Preferences",
+		"id": "preferences",
+		"children":
+		[
+			{
+				"caption": "Package Settings",
+				"id": "package-settings",
+				"children":
+				[
+					{
+						"caption": "SublimeBlender",
+						"children":
+						[
+							{
+								"caption": "Settings – Default",
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/SublimeBlender/SublimeBlender.sublime-settings"
+								}
+							},
+							{
+								"caption": "Settings – User",
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/User/SublimeBlender.sublime-settings"
+								}
+							},
+							{ "caption": "-" },
+							{
+								"caption": "Key Bindings – Default",
+								"platform": "Linux",
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/SublimeBlender/Default (Linux).sublime-keymap"
+								}
+							},
+							{
+								"caption": "Key Bindings – Default",
+								"platform": "Windows",
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/SublimeBlender/Default (Windows).sublime-keymap"
+								}
+							},
+							{
+								"caption": "Key Bindings – Default",
+								"platform": "OSX",
+								"command": "open_file",
+								"args": {
+									"file": "${packages}/SublimeBlender/Default (OSX).sublime-keymap"
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]
