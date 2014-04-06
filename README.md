@@ -2,6 +2,10 @@ SublimeBlender
 ==============
 #### Execute scripts in Blender
 
+![alt tag](https://dl.dropboxusercontent.com/u/1652825/code/sublime/sublimeBlender/sublimeBlender_autoComplete.png)
+![alt tag](https://dl.dropboxusercontent.com/u/1652825/code/sublime/sublimeBlender/sublimeBlender_blenderCommand.png)
+![alt tag](https://dl.dropboxusercontent.com/u/1652825/code/sublime/sublimeBlender/sublimeBlender_codeExecute.png)
+
 ## Intro
 Develop with Sublime Text 3 as an external script editor in Blender.
 Execute scripts directly from Sublime.
