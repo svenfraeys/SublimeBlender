@@ -10,7 +10,7 @@ Receive autocomplete dropdowns from the blender modules
 ## Installation
 download the package from [GitHub](https://github.com/svenfraeys/SublimeFoldPython "SublimeFoldPython") into your `Packages` folder
 
-the Blender addon needs to be downloaded from [SublimeBlenerAddon](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon")
+the Blender addon needs to be downloaded from [SublimeBlenderAddon](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon")
 
 ## How to use
 1. Install SublimeBlender (sublime package and SublimeBlenderAddon (blender addon)
