@@ -1,6 +1,4 @@
 {
-	"std_output_in_sublime" : false,
-	
 	// Fold getters and setter as one
 	"host": "localhost",
 	"port": 8006
