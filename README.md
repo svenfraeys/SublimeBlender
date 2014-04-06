@@ -1,6 +1,6 @@
 SublimeBlender
 ==============
-#### Send scripts to blender and autocompletion
+#### Execute scripts in Blender
 
 ## Intro
 Develop with Sublime Text 3 as an external script editor in Blender.
@@ -36,5 +36,5 @@ In the settings you can change several parameters
 * `host` : The host that will receive the signal (default : localhost)
 * `port` : The port that will receive the signal (default : 8006)
  
-
+## More Information
 https://docs.google.com/document/d/1-hWEdp1Gz4zjyio7Hdc0ZnFXKNB6eusYITnuMI3n65M
