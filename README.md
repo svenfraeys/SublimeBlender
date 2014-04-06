@@ -10,11 +10,12 @@ Receive autocomplete dropdowns from the blender modules
 ## Installation
 download the package from [GitHub](https://github.com/svenfraeys/SublimeFoldPython "SublimeFoldPython") into your `Packages` folder
 
-the blender addon needs to be downloaded from a different github
+the Blender addon needs to be downloaded from [GitHub](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon")
 
 ## How to use
-once the sublime package and blender addon is installed, launch in Blender `SublimeBlender : Open Connection`
-After this you can send signals from sublime to blender.
+1. Install SublimeBlender (sublime package and SublimeBlenderAddon (blender addon)
+2. Launch in Blender `SublimeBlender : Open Connection`
+3. Execute a script by using `Alt+P` in Sublime Text
 
 ## Updates
 march 2014
