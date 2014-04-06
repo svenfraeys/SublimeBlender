@@ -13,7 +13,7 @@ download the package from [GitHub](https://github.com/svenfraeys/SublimeBlender 
 the Blender addon needs to be downloaded from [SublimeBlenderAddon](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon")
 
 ## How to use
-1. Install [GitHub](https://github.com/svenfraeys/SublimeBlender "SublimeBlender") (sublime package) and [SublimeBlenderAddon](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon") (blender addon)
+1. Install [SublimeBlender](https://github.com/svenfraeys/SublimeBlender "SublimeBlender") (sublime package) and [SublimeBlenderAddon](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon") (blender addon)
 2. Launch in Blender `SublimeBlender : Open Connection`
 3. Execute a script by using `Alt+P` in Sublime Text
 
