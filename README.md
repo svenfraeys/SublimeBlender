@@ -1,9 +1,39 @@
 SublimeBlender
 ==============
+#### Send scripts to blender and autocompletion
 
-Develop with Sublime Text 3 as an external script editor in Blender
+## Intro
+Develop with Sublime Text 3 as an external script editor in Blender.
+Execute scripts directly from Sublime.
+Receive autocomplete dropdowns from the blender modules
+
+## Installation
+download the package from [GitHub](https://github.com/svenfraeys/SublimeFoldPython "SublimeFoldPython") into your `Packages` folder
+
+the blender addon needs to be downloaded from a different github
+
+## How to use
+once the sublime package and blender addon is installed, launch in Blender `SublimeBlender : Open Connection`
+After this you can send signals from sublime to blender.
+
+## Updates
+march 2014
+* bpy autocompletion : autocompletion when working on a bpy library
+* bpy import autocompletion : when importing the bpy modules
+* auto-save the file when executing your active script
+
+february 2014
+* Execute your script from Sublime directly in Blender
+* Sublime Console shows the console output of Blender
 
 
-For Installation and Documentation read the Google Document below
+## Key Bindings
+* `Alt+P` : Execute open script in Blender
+
+## Settings
+In the settings you can change several parameters
+* `host` : The host that will receive the signal (default : localhost)
+* `port` : The port that will receive the signal (default : 8006)
+ 
 
 https://docs.google.com/document/d/1-hWEdp1Gz4zjyio7Hdc0ZnFXKNB6eusYITnuMI3n65M
