@@ -5,33 +5,33 @@
 
     },
     {
-        "caption": "Preferences: SublimeBlender Settings",
+        "caption": "Preferences: Blender Development Settings",
         "command": "open_file", "args":
         {
-            "file": "${packages}/SublimeBlender/SublimeBlender.sublime-settings"
+            "file": "${packages}/Blender Development/SublimeBlender.sublime-settings"
         }
     },
     {
-        "caption": "Preferences: SublimeBlender Key Bindings",
+        "caption": "Preferences: Blender Development Key Bindings",
         "command": "open_file", "args":
         {
-            "file": "${packages}/SublimeBlender/Default (Windows).sublime-keymap",
+            "file": "${packages}/Blender Development/Default (Windows).sublime-keymap",
             "platform": "Windows"
         }
     },
     {
-        "caption": "Preferences: SublimeBlender Key Bindings",
+        "caption": "Preferences: Blender Development Key Bindings",
         "command": "open_file", "args":
         {
-            "file": "${packages}/SublimeBlender/Default (OSX).sublime-keymap",
+            "file": "${packages}/Blender Development/Default (OSX).sublime-keymap",
             "platform": "OSX"
         }
     },
     {
-        "caption": "Preferences: SublimeBlender Key Bindings",
+        "caption": "Preferences: Blender Development Key Bindings",
         "command": "open_file", "args":
         {
-            "file": "${packages}/SublimeBlender/Default (Linux).sublime-keymap",
+            "file": "${packages}/Blender Development/Default (Linux).sublime-keymap",
             "platform": "Linux"
         }
     }

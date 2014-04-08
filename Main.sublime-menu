@@ -10,14 +10,14 @@
 				"children":
 				[
 					{
-						"caption": "SublimeBlender",
+						"caption": "Blender Development",
 						"children":
 						[
 							{
 								"caption": "Settings – Default",
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/SublimeBlender/SublimeBlender.sublime-settings"
+									"file": "${packages}/Blender Development/SublimeBlender.sublime-settings"
 								}
 							},
 							{
@@ -33,7 +33,7 @@
 								"platform": "Linux",
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/SublimeBlender/Default (Linux).sublime-keymap"
+									"file": "${packages}/Blender Development/Default (Linux).sublime-keymap"
 								}
 							},
 							{
@@ -41,7 +41,7 @@
 								"platform": "Windows",
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/SublimeBlender/Default (Windows).sublime-keymap"
+									"file": "${packages}/Blender Development/Default (Windows).sublime-keymap"
 								}
 							},
 							{
@@ -49,7 +49,7 @@
 								"platform": "OSX",
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/SublimeBlender/Default (OSX).sublime-keymap"
+									"file": "${packages}/Blender Development/Default (OSX).sublime-keymap"
 								}
 							}
 						]
