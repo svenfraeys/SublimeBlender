@@ -110,6 +110,10 @@ class SublimeBlender(SublimeBlenderAbstract):
 		'''
 		log('scriptFile=%s' % scriptFile)
 		results = self.communicate({'scriptpath' : urllib.parse.quote_plus(scriptFile) })
+
+		if results is None:
+			return None
+			
 		stdOut = self.getStdOut()
 		if stdOut != '':
 			print('%s' % stdOut)
@@ -190,8 +194,19 @@ class SublimeBlenderExecuteCommand(sublime_plugin.WindowCommand):
 	"""execute a scriptFile
 	"""
 	def run(self):
-		
-		view = sublime.active_window().active_view()
+		window = sublime.active_window()
+
+		if not window:
+			return
+
+		view = window.active_view()
+
+		if not view:
+			return
+
+		if view.file_name() is None:
+			return
+
 		# for a in dir(self.view):
 			# print(a)
 		
