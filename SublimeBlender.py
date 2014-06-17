@@ -11,7 +11,6 @@
 # Free for non-commercial use
 #
 ################################################################################
-
 import sys, socket, urllib, http.client, urllib.request, getpass, subprocess, json
 import sublime, sublime_plugin
 
