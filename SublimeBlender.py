@@ -92,7 +92,7 @@ class SublimeBlender(SublimeBlenderAbstract):
 			handle = urllib.request.urlopen(urlpath,timeout=0.2)
 			pass
 		except:
-			print("ERROR : No Connection was found with Blender")
+			log("ERROR : No Connection was found with Blender")
 			if not quiet:
 				sublime.error_message("ERROR : No Connection was found with Blender")
 			return None
@@ -120,10 +120,10 @@ class SublimeBlender(SublimeBlenderAbstract):
 	
 	def getConsoleNamespaceComplete(self,query,namespace):
 		results = self.communicate({'console_namespace_complete' : query, 'namespace' : namespace },quiet=True)
+		if results == None:
+			return None
 		return results['result']
-		results = 'temp;results;is'
-		return results.split(";")
-
+		
 	def getConsoleCalltipComplete(self,query,namespace):
 		results = self.communicate({'console_calltip_complete' : query, 'namespace' : namespace },quiet=True)
 		results = results['result']
