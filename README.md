@@ -16,10 +16,16 @@ the Blender addon needs to be downloaded from [SublimeBlenderAddon](https://gith
 
 ## How to use
 1. Install [SublimeBlender](https://github.com/svenfraeys/SublimeBlender "SublimeBlender") (sublime package) and [SublimeBlenderAddon](https://github.com/svenfraeys/SublimeBlenderAddon "SublimeBlenderAddon") (blender addon)
-2. Launch in Blender `SublimeBlender : Open Connection`
+2. Launch in Blender Operator `Sublime Open Connection`, or `TextEditor > Properties > SublimeBlender`
 3. Execute a script by using `Alt+P` in Sublime Text
 
 ## Updates
+august 2014
+* Blender UI info showing when opening connection
+* Operator rename to `Sublime Open Connection`
+* Small bugfixes (None exceptions)
+* SublimeBlender Panel added in `TextEditor > Properties > SublimeBlender` for usability
+
 march 2014
 * bpy autocompletion : autocompletion when working on a bpy library
 * bpy import autocompletion : when importing the bpy modules
