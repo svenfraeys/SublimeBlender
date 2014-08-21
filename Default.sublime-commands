@@ -5,6 +5,11 @@
 
     },
     {
+        "caption": "Blender : Restart Module",
+        "command": "sublime_blender_restart_module",
+
+    },
+    {
         "caption": "Preferences: Blender Development Settings",
         "command": "open_file", "args":
         {
