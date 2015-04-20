@@ -16,11 +16,17 @@ import socket
 import urllib
 import http.client
 import urllib.request
-import getpass
 import subprocess
 import json
 import os
 import sublime, sublime_plugin
+import textwrap
+# add lib to sys paths
+lib_folderpath = os.path.abspath(os.path.join(__file__, '..', 'lib'))
+if lib_folderpath not in sys.path:
+    sys.path.append(lib_folderpath)
+
+import blender_remote as br
 
 VERBOSITY = 0
 def log(message,verbosity=1):
@@ -135,6 +141,7 @@ class SublimeBlender(SublimeBlenderAbstract):
                                     e.g. :- 'SublimeBlenderAddon'
   
         """
+        print( 'restaring module : {0}'.format(module_name) )
         results = self.communicate({'restart_module' : module_name })
 
         if results is None:
@@ -213,9 +220,6 @@ class SublimeBlender(SublimeBlenderAbstract):
         return self.translateResults(returnResultString)
         pass
 
-    
-
-
 class SublimeBlenderLaunch(sublime_plugin.WindowCommand):
     def run(self):
         subprocess.Popen([r'C:\Program Files\Blender Foundation\Blender\blender.exe'])
@@ -224,6 +228,9 @@ class SublimeBlenderExecuteCommand(sublime_plugin.WindowCommand):
     """execute a scriptFile
     """
     def run(self):
+        """run command
+        """
+        print('running sublime blender')
         window = sublime.active_window()
 
         if not window:
@@ -244,8 +251,17 @@ class SublimeBlenderExecuteCommand(sublime_plugin.WindowCommand):
             view.run_command("save")
 
         # communicate
-        blenderCommunication = SublimeBlender()
+
         scriptpath = view.file_name()
+
+        if not scriptpath:
+            return
+
+        blender_remote = create_blender_remote()
+        blender_remote.execfile(scriptpath)
+        return
+
+        blenderCommunication = SublimeBlender()
 
         # scriptpath = r'C:\Users\sven\Dropbox\WG_Code\sfr\blender\scripts\helloWorld.py'
 
@@ -261,28 +277,13 @@ class SublimeBlenderExecuteCommand(sublime_plugin.WindowCommand):
             # sublime.active_window().show_panel(panel='console', toggle=True)
 
 class SublimeBlenderRestartModuleCommand(sublime_plugin.WindowCommand):
+    """restart a module in blender with this command
     """
-    restart a module in blender with this command
-    
-    Args :-
-        
-    
-    Returns :-
-        
-        
-    """
-
     def find_module_name(self):
-        """
-        return module name that needs to be restarted
-        
-        Args :-
-            
-        
-        Returns :-
-            modulename (str) :- name of the module to restart
-                                    e.g. :- 'SublimeBlenderAddon'
-            
+        """return module name that needs to be restarted
+
+        Returns:
+            modulename (str): name of the module to restart, e.g.: 'SublimeBlenderAddon'
         """
         window = sublime.active_window()
 
@@ -308,15 +309,7 @@ class SublimeBlenderRestartModuleCommand(sublime_plugin.WindowCommand):
         return modulename
 
     def run(self):
-        """
-        run the restart module command
-        
-        Args :-
-            
-        
-        Returns :-
-            
-            
+        """run the restart module command
         """
         modulename = self.find_module_name()
         print('modulename={0}'.format(modulename) )
@@ -324,13 +317,141 @@ class SublimeBlenderRestartModuleCommand(sublime_plugin.WindowCommand):
             print('no module found to restart')
             return False
 
-        blenderCommunication = SublimeBlender()
-        blenderCommunication.restart_module(modulename)
+        blender_remote = create_blender_remote()
+        restart_module(blender_remote, modulename)
+
+        # blenderCommunication = SublimeBlender()
+        # blenderCommunication.restart_module(modulename)
+
+RESTART_MODULE_CODE = """
+    module_name = "{module_name}"
+    print("disable addon " + module_name)
+    bpy.ops.wm.addon_disable(module=module_name)
+    print("enable addon " + module_name)
+    bpy.ops.wm.addon_enable(module=module_name)
+    """
+
+COMPLETE_NAMESPACE_CODE = """
+    global blender_remote_exec_result
+    import console.complete_namespace
+    object_to_dir = None
+
+    name_to_dir = "{object_name}"
+
+    if name_to_dir in globals():
+        object_to_dir = eval(name_to_dir)
+    else:
+        object_to_dir = importlib.import_module(name_to_dir)
+    if object_to_dir:
+        completinglist = console.complete_namespace.complete("{query}", {name_to_dir : object_to_dir})
+        
+        # if len(completinglist) > 101:
+            # completinglist = completinglist[:100]
+
+    # return completinglist 
+    # print(blender_remote_exec_result)
+    # print(completinglist)
+    blender_remote_exec_result = completinglist 
+    # print(blender_remote_exec_result)
+    """
+
+COMPLETE_IMPORT_CODE = """
+    global blender_remote_exec_result
+
+    import console.complete_import
+    completinglist = console.complete_import.complete("{import_line}")
+    print("{import_line}")
+    print(completinglist)
+    blender_remote_exec_result = completinglist
+    """
+
+COMPLETE_CALLTIP_CODE = """
+    global blender_remote_exec_result
+
+    nameOfObjectToDir = "{object_name}"
+    if nameOfObjectToDir in globals():
+        variableObject = eval(nameOfObjectToDir)
+    else:
+        variableObject = importlib.import_module(nameOfObjectToDir)
+
+    if variableObject:
+        import console.complete_calltip
+        completinglist = console.complete_calltip.complete("{query}", 999, {nameOfObjectToDir : variableObject})
+        sb_output("nameOfObjectToDir=%s" % nameOfObjectToDir)
+        sb_output("variableObject=%s" % variableObject)
+        sb_output(completinglist)
+        retstr = str(completinglist[-1])
+        # return retstr
+    else:
+        sb_output("could not find namespace : %s" % namespace )
+
+    blender_remote_exec_result = retstr
+    """
+
+def restart_module(blender_remote, module_name):
+    """restart module
+    """
+    blender_code = textwrap.dedent(RESTART_MODULE_CODE)
+    blender_code = blender_code.format(module_name=module_name)
+    return blender_remote.exec_code(blender_code)
+
+def console_complete_import(blender_remote, import_str):
+    """return list of complete suggestions
+
+    Args:
+        import_str (str): line of import (e.g. 'import bpy.o')
+
+    """
+    blender_code = textwrap.dedent(COMPLETE_IMPORT_CODE)
+    blender_code = blender_code.format(import_line=import_str)
+    return blender_remote.exec_code(blender_code)
+    
+def console_complete_namespace(blender_remote, object_name, query):
+    """return list of completions
+
+    Args:
+        blender_remote (str): blender remote object
+        object_name (str): name of object to query, e.g. 'bpy'
+        query (str): what to query from this object, e.g. : 'bpy.bla'
+    """
+    blender_code = textwrap.dedent(COMPLETE_NAMESPACE_CODE)
+    blender_code = blender_code.replace('{object_name}', object_name)
+    blender_code = blender_code.replace('{query}', query)
+    result = blender_remote.exec_code(blender_code)
+    return result
+
+def console_complete_calltip(blender_remote, object_name, query):
+    """return list of completions
+
+    Args:
+        blender_remote (str): blender remote object
+        object_name (str): name of object to query, e.g. 'bpy'
+        query (str): what to query from this object, e.g. : 'bpy.bla'
+    """
+    blender_code = textwrap.dedent(COMPLETE_CALLTIP_CODE)
+    blender_code = blender_code.replace('{object_name}', object_name)
+    blender_code = blender_code.replace('{query}', query)
+    result = blender_remote.exec_code(blender_code)
+    return result
+
+def create_blender_remote():
+    """return a BlenderRemote instance
+    """
+    settings = sublime.load_settings("SublimeBlender.sublime-settings")
+    host = settings.get('host')
+    port = settings.get('port')
+    blender_remote = br.BlenderRemote(host, port)
+    return blender_remote
 
 class SublimeBlenderCompletion(sublime_plugin.EventListener):
     """ auto complete manager
     """
     def on_query_completions(self, view, prefix, locations):
+        # create the remote
+        blender_remote = create_blender_remote()
+        
+        
+
         log('query bpy completions...')
         
         linestring, beforestring, afterstring = self.getLineFullBeforeAfter(view)
@@ -363,9 +484,11 @@ class SublimeBlenderCompletion(sublime_plugin.EventListener):
         properties = []
         
         if beforestring[-1] == "(":
-            returndata = (SublimeBlender().getConsoleCalltipComplete(importCommand+"."+ query,"bpy"))
+            returndata = console_complete_calltip(blender_remote, "bpy", importCommand+"."+ query)
+            # returndata = (SublimeBlender().getConsoleCalltipComplete(importCommand+"."+ query,"bpy"))
             if returndata is None:
                 return ([])
+            returndata = [returndata]
 
             log("returndata=")
             log(returndata)
@@ -374,8 +497,11 @@ class SublimeBlenderCompletion(sublime_plugin.EventListener):
 
         if beforestring.find("import") != -1:
             log("getConsoleImportComplete")
-            importstring = beforestring.strip().replace(" ","%20")
-            properties = SublimeBlender().getConsoleImportComplete(importstring)
+            importstring = beforestring.strip()
+            # importstring = beforestring.strip().replace(" ","%20")
+
+            properties = console_complete_import(blender_remote, importstring)
+            # properties = SublimeBlender().getConsoleImportComplete(importstring)
             if properties is None:
                 return ([])
         else:
@@ -383,7 +509,8 @@ class SublimeBlenderCompletion(sublime_plugin.EventListener):
             log("namespace=%s" % namespace)
             importstring = "" + importCommand + "." +query
             if namespace != "":
-                properties = SublimeBlender().getConsoleNamespaceComplete(importstring,namespace)
+                properties = console_complete_namespace(blender_remote, namespace, importstring)
+                # properties = SublimeBlender().getConsoleNamespaceComplete(importstring,namespace)
                 if properties is None:
                     return ([])
 

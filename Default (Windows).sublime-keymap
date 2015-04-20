@@ -1,5 +1,6 @@
 [
-	{ 
-		"keys": ["alt+p"], "command": "sublime_blender_execute"
-	}
+    { 
+        "keys": ["alt+p"], "command": "sublime_blender_execute",
+        "keys": ["alt+shift+p"], "command": "sublime_blender_restart_module"
+    }
 ]
